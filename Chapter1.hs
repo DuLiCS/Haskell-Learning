@@ -96,13 +96,29 @@ flip' f  = g
   where g x y = f y x 
 
 
+myLast :: [a] -> a
+myLast [] = error "empty"
+myLast [x] = x
+myLast (_:xs) = myLast xs
+
+--solution1
+myButLast :: [a] -> a
+myButLast x = reverse x !! 1
+
+--solution2
+myButLast' [x,_] = x
+myButLast' (_:xs) = myButLast' xs
 
 
 
+--solution1
+elementAt :: [a] -> Int -> a
+elementAt list n = list !! (n - 1)
 
-
-
-
+--solution2
+elementAt' (x:_) 1 = x
+elementAt' [] _ = error "out of bounds"
+elementAt' (_:xs) k = elementAt' xs (k - 1)
 
 
 
