@@ -27,3 +27,75 @@ reverseL (x:xs) = reverseL xs ++ [x]
 
 quicksort [] = []
 quicksort (x:xs) = (quicksort [y | y <- xs, y<x]) ++ [x] ++ (quicksort [y | y <-xs, y>=x])
+
+
+factorial :: (Integral a) => a -> a
+
+factorial 0 = 1
+factorial x = x * factorial (x - 1)
+
+head' :: [a] -> a
+head' [] = error "empty list"
+head' (x:xs) = x
+
+
+max' :: (Ord a) => a -> a -> a
+max' a b
+  | a > b = a
+  | otherwise = b
+
+
+myCompare :: (Ord a) => a -> a -> Ordering
+a `myCompare` b
+  | a > b   = GT
+  | a == b  = EQ
+  | a < b   = LT
+
+
+initials :: String -> String -> String
+initials firstname lastname = [f] ++ ". " ++ [l] ++ ". "
+   where (f:_) = firstname
+         (l:_) = lastname
+
+calBmi :: (RealFloat a) => [(a, a)] -> [a]
+calBmi xs = [bmi w h | (w, h) <- xs]
+   where bmi weight height = weight / height ^ 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
