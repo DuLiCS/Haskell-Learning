@@ -25,8 +25,8 @@ reverseL [x] = [x]
 reverseL (x:xs) = reverseL xs ++ [x]
 
 
-quicksort [] = []
-quicksort (x:xs) = (quicksort [y | y <- xs, y<x]) ++ [x] ++ (quicksort [y | y <-xs, y>=x])
+-- quicksort [] = []
+-- quicksort (x:xs) = (quicksort [y | y <- xs, y<x]) ++ [x] ++ (quicksort [y | y <-xs, y>=x])
 
 
 factorial :: (Integral a) => a -> a
@@ -62,16 +62,38 @@ calBmi xs = [bmi w h | (w, h) <- xs]
    where bmi weight height = weight / height ^ 2
 
 
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "empty list"
+maximum' [x] = x
+maximum' (x:xs)
+  | x > maxTail = x
+  | otherwise = maxTail
+  where maxTail = maximum' xs
+
+ 
 
 
+quicksort :: (Ord a) => [a] -> [a]  
+quicksort [] = []  
+quicksort (x:xs) =   
+    let smallerSorted = quicksort [a | a <- xs, a <= x]  
+        biggerSorted = quicksort [a | a <- xs, a > x]  
+    in  smallerSorted ++ [x] ++ biggerSorted 
 
+compareWithHundred :: (Num a, Ord a) => a -> Ordering
+compareWithHundred  = compare 100
 
+applyTwice :: (a -> a ) -> a -> a
+applyTwice f x = f(f x)
 
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _[]_ = []
+zipWith' _ _ [] = []
+zipWith' f (x: xs) (y: ys) = f x y : zipWith' f xs ys
 
-
-
-
-
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f  = g
+  where g x y = f y x 
 
 
 
