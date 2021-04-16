@@ -1,3 +1,4 @@
+
 doubleMe x = x + x
 
 doubleUs x y = x + x + y + y
@@ -101,6 +102,10 @@ myLast [] = error "empty"
 myLast [x] = x
 myLast (_:xs) = myLast xs
 
+myLast' :: [a] -> a
+myLast' = foldr1 (const id)
+
+
 --solution1
 myButLast :: [a] -> a
 myButLast x = reverse x !! 1
@@ -122,14 +127,22 @@ elementAt' (_:xs) k = elementAt' xs (k - 1)
 
 
 
+myLength :: [a] -> Int
+myLength [] = 0
+myLength (x:xs) = 1 + myLength xs
 
 
+myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = reverse xs ++ [x]
+
+removeNoneUppercase :: [Char] -> [Char]
+removeNoneUppercase  st = [ x | x <- st, x `elem` ['A'..'Z']]
 
 
-
-
-
-
+lucky :: (Integral a) => a -> String
+lucky 7 = "It's seven"
+lucky x = "out of luck"
 
 
 
