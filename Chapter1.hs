@@ -74,23 +74,15 @@ maximum' (x:xs)
  
 
 
-quicksort :: (Ord a) => [a] -> [a]  
-quicksort [] = []  
-quicksort (x:xs) =   
-    let smallerSorted = quicksort [a | a <- xs, a <= x]  
-        biggerSorted = quicksort [a | a <- xs, a > x]  
-    in  smallerSorted ++ [x] ++ biggerSorted 
 
-compareWithHundred :: (Num a, Ord a) => a -> Ordering
-compareWithHundred  = compare 100
+--compareWithHundred :: (Num a, Ord a) => a -> Ordering
+--compareWithHundred  = compare 100
 
-applyTwice :: (a -> a ) -> a -> a
-applyTwice f x = f(f x)
 
-zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
-zipWith' _[]_ = []
-zipWith' _ _ [] = []
-zipWith' f (x: xs) (y: ys) = f x y : zipWith' f xs ys
+--zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+--zipWith' _[]_ = []
+--zipWith' _ _ [] = []
+--zipWith' f (x: xs) (y: ys) = f x y : zipWith' f xs ys
 
 flip' :: (a -> b -> c) -> (b -> a -> c)
 flip' f  = g
@@ -143,6 +135,101 @@ removeNoneUppercase  st = [ x | x <- st, x `elem` ['A'..'Z']]
 lucky :: (Integral a) => a -> String
 lucky 7 = "It's seven"
 lucky x = "out of luck"
+
+
+addVectors :: (Num a) => (a, a) -> (a, a) -> (a, a)
+addVectors a b = (fst a + fst b, snd a + snd b)
+
+addVectors' :: (Num a) => (a, a) -> (a, a) -> (a, a)
+addVectors' (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+
+second :: (a, b, c) -> b
+second (_, y, _) = y
+
+bmiTell :: (RealFloat a) => a -> a -> String  
+bmiTell weight height  
+    | bmi <= skinny = "You're underweight, you emo, you!"  
+    | bmi <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= fat    = "You're fat! Lose some weight, fatty!"  
+    | otherwise     = "You're a whale, congratulations!"  
+    where bmi = weight / height ^ 2  
+          skinny = 18.5  
+          normal = 25.0  
+          fat = 30.0
+
+cylinder :: (RealFloat a) => a -> a -> a
+cylinder r h =
+      let sideArea = 2 * pi * r * h
+          topArea = pi * r ^ 2
+      in sideArea + 2 * topArea 
+
+
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
+
+
+maximum'' :: (Ord a) => [a] -> a
+maximum'' [] = error "empty"
+maximum'' [x] = x
+maximum'' (x:xs) = max x (maximum'' xs)
+
+replicate' :: (Num i, Ord i) => i -> a -> [a]  
+replicate' n x  
+    | n <= 0    = []  
+    | otherwise = x:replicate' (n-1) x
+
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+repeat' :: a -> [a]
+repeat' x = x:repeat' x
+
+
+zip' :: [a] -> [b] -> [(a,b)]
+zip' _ [] = []
+zip' [] _ = []
+zip' (x:xs) (y:ys) = (x,y):zip' xs ys
+
+
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' a [] = False
+elem' a (x:xs)
+    | a == x = True
+    | otherwise = a `elem'` xs
+
+
+quicksort :: (Ord a) => [a] -> [a]  
+quicksort [] = []  
+quicksort (x:xs) =  
+    let smallerSorted = quicksort [a | a <- xs, a <= x] 
+        biggerSorted = quicksort [a | a <- xs, a > x]  
+    in smallerSorted ++ [x] ++ biggerSorted
+
+compareWithHundred :: (Num a, Ord a) => a -> Ordering
+compareWithHundred = compare 100  
+
+divideByTen :: (Floating a) => a -> a
+divideByTen = (/10)
+
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _ = []
+zipWith' _ _ [] = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+map' :: (a -> b) -> [a] -> [b]  
+map' _ [] = []  
+map' f (x:xs) = f x : map' f xs
+
+fliter :: (a -> Bool) -> [a] -> [a]
+fliter _ [] = []
+fliter p (x:xs)
+    | p x    = x : fliter p xs
+    | otherwise = fliter p xs
 
 
 
