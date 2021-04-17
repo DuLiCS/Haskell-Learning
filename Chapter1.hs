@@ -224,12 +224,52 @@ zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
 map' :: (a -> b) -> [a] -> [b]  
 map' _ [] = []  
 map' f (x:xs) = f x : map' f xs
-
+  
 fliter :: (a -> Bool) -> [a] -> [a]
 fliter _ [] = []
 fliter p (x:xs)
     | p x    = x : fliter p xs
     | otherwise = fliter p xs
+
+largeDivisible :: (Integral a) => a
+largeDivisible = head (fliter p [10000,9999..])
+     where p x = x `mod` 3829 == 0
+chain :: (Integral a) => a -> [a]
+chain 1 = [1]
+
+numLongChains :: Int
+numLongChains = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+
+--addThree :: (Num a) => a -> a -> a -> a
+--addThree = \x -> \y -> \z -> x + y + z
+
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (\acc x -> acc + x) 0 xs
+
+sum'' :: (Num a) => [a] -> a
+sum'' = foldl (+) 0
+
+elem'' :: (Eq a) => a -> [a] -> Bool
+elem'' y ys = foldl (\acc x -> if x == y then True else acc) False ys 
+
+map''' :: (a -> b) -> [a] -> [b]
+map''' f xs = foldr (\x acc -> f x : acc) [] xs
+
+map'' :: (a -> b) -> [a] -> [b]
+map'' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
+
+maximum''' :: (Ord a) => [a] -> a
+maximum''' = foldr1 (\x acc -> if x > acc then x else acc)
+
+reverse'' :: [a] -> [a]
+reverse'' = foldl (\acc x -> x : acc) []
+
+
+
+
+
+
+
 
 
 
