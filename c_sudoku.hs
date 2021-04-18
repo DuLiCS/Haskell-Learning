@@ -22,7 +22,7 @@ boxSize = 2
 values :: [Value]
 values = [1 .. 4]
 
---the value 0 indi­cat­ing an empty cell.
+--the value 0 indicating an empty cell.
 empty :: Value -> Bool
 empty = (== 0)
 
@@ -60,7 +60,7 @@ noDups [] = True
 noDups (x : xt) = if x == 0 then  (noDups xt) else (not (elem x xt) && noDups xt) 
 
 
---The next three is extrac­tion func­tion
+--The next three is extraction function
 rows :: Matrix a -> [Row a]
 rows =  id
 
@@ -89,7 +89,7 @@ chop n xs = take n xs : chop n (drop n xs)
 
 
 --a list of grids with every possibility for the empty squares filled in.
---a combination of deter­min­is­tic and non-deter­min­is­tic elements 
+--a combination of deterministic and non-deter­ministic elements 
 collapse =  sequence . map sequence
 
 --map the choice function into every list 
@@ -105,16 +105,16 @@ solveBrute =  filter valid . collapse . choices
 
 --Optimise
 
---Enu­mer­at­ing all dig­its for empty spaces doesn’t take into account the con­straints of the puz­zle itself.
+--Enumerating all digits for empty spaces doesn’t take into account the constraints of the puzzle itself.
 {-It take so long to solve the problem like 
         [[3,0,0,0],
          [2,0,0,0],
          [0,3,0,0],
          [0,0,1,3]]
-For each non-deter­min­is­tic cell, we can throw away any incon­sis­tent choice.
+For each non-deterministic cell, we can throw away any inconsistent choice.
 -}
 
---throw away incon­sis­tent choices in rows,columns and boxes
+--throw away inconsistent choices in rows,columns and boxes
 prune =  pruneBy boxes . pruneBy cols . pruneBy rows
          where pruneBy f = f . map reduce . f
 
@@ -123,7 +123,7 @@ single :: [a] -> Bool
 single [_] = True
 single _   = False
 
---throw away incon­sis­tent choice.
+--throw away inconsistent choice.
 --reduce [[3],[4],[1,2,3,4],[1,2,3,4]] = [[3],[4],[1,2],[1,2]]
 --minus 
 reduce xss =  [xs `minus` singles | xs <- xss]
