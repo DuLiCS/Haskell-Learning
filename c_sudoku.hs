@@ -1,3 +1,26 @@
+-- Returns every solution of the 4x4 sudoku.
+-- Provide two functions to solve the problem.
+-- One is bruteForceSolve using the brute force method.
+-- The optimizeSolve is the optimized version of the bruteForceSolve.
+-- These two functions will return all solution of the 4x4 sudoku.
+-- If there is no valid solution of the puzzle,function will return [].
+-- Usage: 1. Load the haskell file     :l sudoku.hs
+--        2. bruteForceSolve input (brute force method)
+--        e.g bruteForceSolve [[3,4,0,0],[2,0,3,0],[0,3,0,2],[0,0,1,3]]
+--        3. optimizedSolve	input  (optimized version)
+--        e.g optimizeSolve [[3,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]]
+--        4. Using bruteForceSolve examplePuzzle or optimizedSolve multipleSolutionsPuzzle for test.
+
+--Main> bruteForceSolve [[3,4,0,0],[2,0,3,0],[0,3,0,2],[0,0,1,3]]
+--[[[3,4,2,1],[2,1,3,4],[1,3,4,2],[4,2,1,3]]]
+
+--Main> optimizeSolve [[3,0,0,0],[0,2,0,0],[4,0,0,3],[0,0,1,0]]
+--[]
+
+--*Main> optimizeSolve multipleSolutionsPuzzle 
+--[[[3,1,2,4],[2,4,3,1],[1,3,4,2],[4,2,1,3]],[[3,1,4,2],[2,4,3,1],[1,3,2,4],[4,2,1,3]],[[3,4,2,1],[2,1,3,4],[1,3,4,2],[4,2,1,3]]]
+
+
 import Data.List
 
 {-
@@ -6,8 +29,10 @@ of rows, where each row is a list of the numbers
 in the grid. The numbers are either 1, 2, 3, 4 and
 0 represent the field is empty. 
 
-According to the description above，I construct the
-type of the 
+According to the description above，I construct the following
+types.
+
+
 -}
 type Grid = Matrix Value
 type Matrix a = [Row a]
@@ -33,22 +58,22 @@ examplePuzzle = [[3,4,0,0],
          [2,0,3,0],
          [0,3,0,2],
          [0,0,1,3]]
-
+--The example of multiple solutions puzzle
 multipleSolutionsPuzzle :: Grid
 multipleSolutionsPuzzle =
         [[3,0,0,0],
-         [0,0,0,0],
-         [0,0,0,0],
-         [0,0,1,0]]
+         [2,0,3,0],
+         [0,3,0,0],
+         [0,0,1,3]]
 
 
-{-determing wether a grid is solved or not
+{-Determing wether a grid is solved or not
 our rows,columns and boxes must have all the digits(1,2,3,4)
-without duplicates.Valid function extract rows,columns and boxes and
+without duplicates.validGrid function extract rows,columns and boxes and
 check this criteria.
 -}
-valid :: Grid -> Bool
-valid g = all noDups (rows g) && 
+validGrid :: Grid -> Bool
+validGrid g = all noDups (rows g) && 
           all noDups (cols g) &&
           all noDups (boxes g)
 
@@ -100,10 +125,10 @@ choices g = map (map choice) g
 
 --iterate all the possible grids,get all grids that meet the criterion of 4x4 sudoku
 --The brute force solution 
-solveBrute :: Grid -> [Grid]
-solveBrute =  filter valid . collapse . choices
+bruteForceSolve :: Grid -> [Grid]
+bruteForceSolve =  filter validGrid . collapse . choices
 
---Optimise
+--Optimize
 
 --Enumerating all digits for empty spaces doesn’t take into account the constraints of the puzzle itself.
 {-It take so long to solve the problem like 
@@ -115,8 +140,8 @@ For each non-deterministic cell, we can throw away any inconsistent choice.
 -}
 
 --throw away inconsistent choices in rows,columns and boxes
-prune =  pruneBy boxes . pruneBy cols . pruneBy rows
-         where pruneBy f = f . map reduce . f
+optimize =  optimizeIn boxes . optimizeIn cols . optimizeIn rows
+         where optimizeIn f = f . map reduce . f
 
 --determine it is a single element list or not
 single :: [a] -> Bool
@@ -139,8 +164,8 @@ xs `minus` ys = if single xs then xs else xs \\ ys
 --a list of grids with every possibility for the empty squares filled in.
 --a combination of deter­min­is­tic and non-deter­min­is­tic elements,the non-deter­min­is­tic elements here are reduced
 --iterate all the possible grids,get all grids that meet the criterion of 4x4 sudoku
-solvePrune :: Grid -> [Grid]
-solvePrune =  filter valid . collapse . prune . choices
+optimizeSolve :: Grid -> [Grid]
+optimizeSolve =  filter validGrid . collapse . optimize . choices
 
 
 
