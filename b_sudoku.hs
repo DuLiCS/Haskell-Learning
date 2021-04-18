@@ -3,6 +3,14 @@ import Data.Array
 import Data.List
 import System.Environment
 
+{-
+the input is like this:
+	input = [[3,4,0,0],
+            [2,0,3,0],
+            [0,3,0,2],
+            [0,0,1,3]]
+the
+-}
 
 type Indice4D = (Int,Int,Int,Int)
 type Indice2D = (Int,Int)
@@ -14,11 +22,10 @@ testString = " 34 __ " ++
                   " _3 _2 " ++
                   " __ 13 "
 
-input = [[3, 4, 0, 0],
-         [2, 0, 3, 0],
-         [0, 3, 0, 2],
-         [0, 0, 1, 3]]
-
+puzzle = [[3,4,0,0],
+         [2,0,3,0],
+         [0,3,0,2],
+         [0,0,1,3]]
 
 
 
@@ -60,23 +67,14 @@ fillGrid' g ps = concat [fillGrid' (g // [(p, d)]) ps' | d <- qs]
         ps' = delete p ps
 
 candidates :: Grid -> Indice4D -> [Digit]
-candidates g (x,y,x',y') = [1..4] \\ (row++col++sqr)
+candidates g (x,y,x',y') = [1..9] \\ (row++col++sqr)
     where row = [n | x  <- r3, x' <- r3, let n = g!(x,y,x',y'), n /= 0]
           col = [n | y  <- r3, y' <- r3, let n = g!(x,y,x',y'), n /= 0]
           sqr = [n | x' <- r3, y' <- r3, let n = g!(x,y,x',y'), n /= 0]
-          r3 = [0..1]
-
-
-solveGrid grid = do putStrLn "\nGrid:\n"
-                    putGrid grid
-                    putGrids $ zip [1..] $ solve grid
+          r3 = [0..2]
 
 
 
-putGrids ((i,g):gs) = do putStrLn ("\nSolution "++show i++":\n")
-                         putGrids g
-                         --putGrids gs
-putGrids [] = return ()
 
 
 
