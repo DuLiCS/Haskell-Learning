@@ -26,11 +26,6 @@ values = [1 .. 4]
 empty :: Value -> Bool
 empty = (== 0)
 
---sigle function we will use later to optimize our method 
-single :: [a] -> Bool
-single [_] = True
-single _   = False
-
 
 --The sample input here 
 examplePuzzle :: Grid
@@ -42,9 +37,9 @@ examplePuzzle = [[3,4,0,0],
 multipleSolutionsPuzzle :: Grid
 multipleSolutionsPuzzle =
         [[3,0,0,0],
-         [2,0,0,0],
-         [0,3,0,0],
-         [0,0,1,3]]
+         [0,0,0,0],
+         [0,0,0,0],
+         [0,0,1,0]]
 
 
 {-determing wether a grid is solved or not
@@ -118,21 +113,34 @@ solveBrute =  filter valid . collapse . choices
          [0,0,1,3]]
 For each non-deter­min­is­tic cell, we can throw away any incon­sis­tent choice.
 -}
+
+--throw away incon­sis­tent choices in rows,columns and boxes
 prune =  pruneBy boxes . pruneBy cols . pruneBy rows
          where pruneBy f = f . map reduce . f
 
+--determine it is a single element list or not
+single :: [a] -> Bool
+single [_] = True
+single _   = False
+
+--throw away incon­sis­tent choice.
+--reduce [[3],[4],[1,2,3,4],[1,2,3,4]] = [[3],[4],[1,2],[1,2]]
+--minus 
 reduce xss =  [xs `minus` singles | xs <- xss]
+--singles choose all single elements and concatenate them
               where singles = concat (filter single xss)
 
+{-if there are only one element,eg. [3] in [[3],[4],[1,2,3,4],[1,2,3,4]],remain unchanged，
+	if there are more than one element eg. [1,2,3,4] in [[3],[4],[1,2,3,4],[1,2,3,4]],throw away 
+		element dupulicate in singles
+-}
 xs `minus` ys = if single xs then xs else xs \\ ys
 
+--a list of grids with every possibility for the empty squares filled in.
+--a combination of deter­min­is­tic and non-deter­min­is­tic elements,the non-deter­min­is­tic elements here are reduced
+--iterate all the possible grids,get all grids that meet the criterion of 4x4 sudoku
 solvePrune :: Grid -> [Grid]
 solvePrune =  filter valid . collapse . prune . choices
 
 
-solveFixPrune :: Grid -> [Grid]
-solveFixPrune = filter valid . collapse . fix prune . choices
 
-fix :: Eq a => (a -> a) -> a -> a
-fix f x =  if x == x' then x else fix f x'
-           where x' = f x
