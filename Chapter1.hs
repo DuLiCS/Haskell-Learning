@@ -264,6 +264,29 @@ maximum''' = foldr1 (\x acc -> if x > acc then x else acc)
 reverse'' :: [a] -> [a]
 reverse'' = foldl (\acc x -> x : acc) []
 
+product' :: (Num a) => [a] -> a
+product' = foldr1 (*) --左折叠处理无限列表会出现无法停止的情况，因此需要使用右折叠
+
+filter'' :: (a -> Bool) -> [a] -> [a]
+filter'' p = foldr(\x acc -> if p x then x:acc else acc) []
+
+
+
+last' :: [a] -> a
+last' = foldr1 (\_ x -> x)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
